@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANOVİS Katılımcı Anketi</title>
+</head>
+<body>
+    <h2>SANOVİS ANKETİMİZ İÇİN DÖRT DAKİKANIZI AYIRIR MISINIZ?</h2>
+    <form id="anketForm">
+        <label for="email">Mail:</label>
+        <input type="email" id="email" name="Mail" required><br><br>
+        
+        <label for="phone">GSM:</label>
+        <input type="tel" id="phone" name="GSM"><br><br>
+        
+        <p>Revolax için sizi ziyaret etmemizi ister misiniz?</p>
+        <input type="radio" id="visit_yes" name="RevolaxVisit" value="Evet">
+        <label for="visit_yes">Evet, ziyaret etmenizi isterim</label><br>
+        <input type="radio" id="visit_no" name="RevolaxVisit" value="Hayır">
+        <label for="visit_no">Şimdilik gerek yok</label><br><br>
+        
+        <p>Polytech deneyimledim ama artık kullanmıyorum (sebepler için işaretleyin):</p>
+        <input type="checkbox" name="PolytechReason" value="Fiyat yüksek"> Ürün fiyatlarını yüksek buldum<br>
+        <input type="checkbox" name="PolytechReason" value="Temin sorunu"> Ürün temininde sorun yaşadım<br>
+        <input type="checkbox" name="PolytechReason" value="Kalite yetersiz"> Ürün kalitesi yeterli gelmedi<br>
+        <input type="checkbox" name="PolytechReason" value="İletişim eksik"> Ürünler hakkında yeterli iletişim kuramadım<br><br>
+        
+        <p>Polytech hakkında bilgi almak ister misiniz?</p>
+        <input type="radio" id="info_yes" name="PolytechInfo" value="Evet">
+        <label for="info_yes">Evet, bilgi almak isterim</label><br>
+        <input type="radio" id="info_no" name="PolytechInfo" value="Hayır">
+        <label for="info_no">Hayır</label><br><br>
+        
+        <p>Polytech Markası ya da Opticon Plus hakkında neden bilgi almadınız?</p>
+        <input type="checkbox" name="PolytechNoInfo" value="Başka marka"> Başka bir protez markası kullanıyorum<br>
+        <input type="checkbox" name="PolytechNoInfo" value="Tanımıyorum"> Ürünlerinizi tanımıyorum<br>
+        <input type="checkbox" name="PolytechNoInfo" value="Fiyat yüksek"> Fiyatları yüksek buluyorum<br>
+        <input type="checkbox" name="PolytechNoInfo" value="Ödeme uygun değil"> Ödeme koşulları bana uygun değil<br>
+        <input type="checkbox" name="PolytechNoInfo" value="İletişim yok"> Satış temsilcileriyle olumlu bir ilişki kuramadım<br><br>
+        
+        <p>Polytech daha önce kullandınız mı?</p>
+        <input type="checkbox" name="PolytechUsed" value="B-Lite"> B-Lite<br>
+        <input type="checkbox" name="PolytechUsed" value="Microthane"> Microthane<br>
+        <input type="checkbox" name="PolytechUsed" value="Mesmo"> Mesmo<br>
+        <input type="checkbox" name="PolytechUsed" value="Vücut implantları"> Vücut implantları<br><br>
+        
+        <button type="submit">Gönder</button>
+    </form>
+    
+    <script>
+        document.getElementById("anketForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(this);
+            const object = {};
+            formData.forEach((value, key) => {
+                if (!object[key]) {
+                    object[key] = value;
+                } else {
+                    object[key] = [object[key]].flat().concat(value);
+                }
+            });
+            
+            fetch("https://script.google.com/macros/s/AKfycbw70PaVDhi0dY2QabqwVjII8RBX5qyKFOJVMYTmy5IjiRl2YK6aJFYV_JKb8JmGO2y6ow/exec", {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: new URLSearchParams(object).toString()
+            })
+            .then(response => response.json())
+            .then(data => alert("Anket başarıyla gönderildi!"))
+            .catch(error => alert("Hata oluştu: " + error));
+        });
+    </script>
+</body>
+</html>
